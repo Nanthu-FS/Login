@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login/Register Page</title>
+</head>
+<body>
+  <h1>Login/Register Page</h1>
+  <form id="login-form">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Login">
+  </form>
+
+  <h1>Register</h1>
+  <form id="register-form">
+    <label for="new-username">Username:</label>
+    <input type="text" id="new-username" name="new-username"><br><br>
+    <label for="new-password">Password:</label>
+    <input type="password" id="new-password" name="new-password"><br><br>
+    <label for="confirm-password">Confirm Password:</label>
+    <input type="password" id="confirm-password" name="confirm-password"><br><br>
+    <input type="submit" value="Register">
+  </form>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    });
+
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newUsername = document.getElementById('new-username').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      if (newPassword !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newUsername, newPassword })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
